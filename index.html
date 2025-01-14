@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Voice-Controlled Counter</title>
+  <title>Contatore Combo Vocale</title>
   <style>
     :root {
       --bg-color: #1e1e1e;
@@ -72,10 +72,10 @@
 <body>
   <div id="combo-form" class="card">
     <h2>Parola combo</h2>
-    <p>Digita la parola per aumentare la combo:</p>
-    <input id="combo-input" type="text" placeholder="sì">
+    <p>Parola per aumentare la combo:</p>
+    <input id="combo-input" type="text" placeholder="ok">
     <br>
-    <button id="combo-submit">OK</button>
+    <button id="combo-submit">'namo</button>
   </div>
   <div id="counter-container" class="card" style="display: none;">
     <h1 id="counter">0</h1>
@@ -119,7 +119,7 @@
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = false;
-      recognition.lang = 'en-US';
+      recognition.lang = 'it-IT';
       recognition.onresult = (event) => {
         for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {
