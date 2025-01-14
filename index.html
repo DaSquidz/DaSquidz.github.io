@@ -71,16 +71,16 @@
 </head>
 <body>
   <div id="combo-form" class="card">
-    <h2>Set Combo Word</h2>
-    <p>Type a word for the combo:</p>
-    <input id="combo-input" type="text" placeholder="e.g., yes">
+    <h2>Parola combo</h2>
+    <p>Digita la parola per aumentare la combo:</p>
+    <input id="combo-input" type="text" placeholder="sì">
     <br>
-    <button id="combo-submit">Submit</button>
+    <button id="combo-submit">OK</button>
   </div>
   <div id="counter-container" class="card" style="display: none;">
     <h1 id="counter">0</h1>
     <p class="instructions">
-      Say <span>"reset"</span> to reset.
+      Dì <span>"zero"</span> per resettare.
     </p>
   </div>
   <script>
@@ -98,7 +98,7 @@
     comboSubmit.addEventListener("click", () => {
       let inputWord = comboInput.value.trim().toLowerCase();
       if (inputWord === "") {
-        alert("word not valid.");
+        alert("parola non valida.");
         return;
       }
       if (inputWord[inputWord.length - 1] !== ".") {
@@ -113,7 +113,7 @@
     function startSpeechRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert("no support for Speech Recognition.");
+        alert("non va il riconoscimento vocale capo");
         return;
       }
       const recognition = new SpeechRecognition();
@@ -128,7 +128,7 @@
             if (spokenWord === comboWord) {
               count++;
               updateCounter();
-            } else if (spokenWord === "reset." || spokenWord === "rosette.") {
+            } else if (spokenWord === "0." || spokenWord === "zero.") {
               count = 0;
               updateCounter();
             }
