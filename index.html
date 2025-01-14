@@ -67,6 +67,9 @@
     button:hover {
       opacity: 0.9;
     }
+    #hide-instruction {
+      color: rgba(240, 240, 240, 0.6);
+    }
   </style>
 </head>
 <body>
@@ -79,9 +82,14 @@
   </div>
   <div id="counter-container" class="card" style="display: none;">
     <h1 id="counter">0</h1>
-    <p class="instructions">
-      Dì <span>"zero"</span> per resettare.
-    </p>
+    <div id="instructions-container">
+      <p class="instructions">
+        Dì <span>"zero"</span> per resettare.
+      </p>
+      <p class="instructions" id="hide-instruction">
+        Premi H per nascondere questo messaggio.
+      </p>
+    </div>
   </div>
   <script>
     let count = 0;
@@ -143,6 +151,11 @@
       };
       recognition.start();
     }
+    document.addEventListener('keydown', (event) => {
+      if (event.key.toLowerCase() === 'h') {
+        document.getElementById('instructions-container').style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
