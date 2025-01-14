@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Voice-Controlled Counter</title>
+  <style>
+    :root {
+      --bg-color: #1e1e1e;
+      --card-color: #2c2c2c;
+      --text-color: #f0f0f0;
+      --accent-color: #00bfff;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .card {
+      background-color: var(--card-color);
+      padding: 2rem 3rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    #counter {
+      font-size: 5rem;
+      margin: 0;
+    }
+    .instructions {
+      margin-top: 1rem;
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+    .instructions span {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 0.5rem;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--accent-color);
+      color: var(--bg-color);
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div id="combo-form" class="card">
+    <h2>Set Combo Word</h2>
+    <p>Type a word for the combo:</p>
+    <input id="combo-input" type="text" placeholder="e.g., yes">
+    <br>
+    <button id="combo-submit">Submit</button>
+  </div>
+  <div id="counter-container" class="card" style="display: none;">
+    <h1 id="counter">0</h1>
+    <p class="instructions">
+      Say <span>"reset"</span> to reset.
+    </p>
+  </div>
+  <script>
+    let count = 0;
+    let comboWord = "";
+    const counterElement = document.getElementById("counter");
+    function updateCounter() {
+      counterElement.textContent = count;
+      console.log("Counter updated: " + count);
+    }
+    const formCard = document.getElementById("combo-form");
+    const counterContainer = document.getElementById("counter-container");
+    const comboInput = document.getElementById("combo-input");
+    const comboSubmit = document.getElementById("combo-submit");
+    comboSubmit.addEventListener("click", () => {
+      let inputWord = comboInput.value.trim().toLowerCase();
+      if (inputWord === "") {
+        alert("word not valid.");
+        return;
+      }
+      if (inputWord[inputWord.length - 1] !== ".") {
+        inputWord += ".";
+      }
+      comboWord = inputWord;
+      console.log("Combo word set to:", comboWord);
+      formCard.style.display = "none";
+      counterContainer.style.display = "block";
+      startSpeechRecognition();
+    });
+    function startSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("no support for Speech Recognition.");
+        return;
+      }
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+      recognition.onresult = (event) => {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            const spokenWord = event.results[i][0].transcript.trim().toLowerCase();
+            console.log("Heard:", spokenWord);
+            if (spokenWord === comboWord) {
+              count++;
+              updateCounter();
+            } else if (spokenWord === "reset." || spokenWord === "rosette.") {
+              count = 0;
+              updateCounter();
+            }
+          }
+        }
+      };
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error: " + event.error);
+      };
+      recognition.onend = () => {
+        recognition.start();
+      };
+      recognition.start();
+    }
+  </script>
+</body>
+</html>
